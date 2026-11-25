@@ -5,7 +5,35 @@ The offline build kit for the Docker image `readystack/caddy:v2.11.9-CE-ubuntu24
 - Release: [v2.11.9-CE-ubuntu24.04-r3](https://github.com/readystack-dev/caddy/releases/tag/v2.11.9-CE-ubuntu24.04-r3)
 - Image: [`docker.io/readystack/caddy:v2.11.9-CE-ubuntu24.04-r3`](https://hub.docker.com/r/readystack/caddy/tags), manifest digest `sha256:b36d6ee63c6c76857f17623c09923ec0b93a5b0a27a4b465eb51016b4552314b`
 - Product page: https://readystack.dev/products/caddy
+- Source and build recipe: https://readystack.dev/products/caddy/recipe
+- Build trail: https://readystack.dev/products/caddy/trail/v2.11.9-CE-ubuntu24.04-r3
 - Defects: this repository's Issues (defects recorded from 25 November 2026 on) and https://readystack.dev/defects.html?product=caddy
+
+## The image
+
+Single container, single static binary, foreground process. No sidecars, no DB.
+
+## Who uses Caddy and why
+
+Developers and system administrators who serve websites, APIs and apps and want HTTPS without handling certificates by hand.
+
+Caddy is a web server and reverse proxy with HTTPS on by default: it gets and renews certificates for public names and runs its own local certificate authority for internal names.
+
+A typical use: A small team runs several web apps on one server. A short Caddyfile puts each app behind its own domain name as a reverse proxy; Caddy obtains and renews the certificates and redirects plain HTTP to HTTPS, so nobody copies certificate files around or tracks expiry dates.
+
+From the upstream project's own description: https://github.com/caddyserver/caddy, https://caddyserver.com/docs/, https://caddyserver.com/docs/automatic-https.
+
+## This release
+
+- Docker Scout policy grade at release: **A** (94%), graded 2026-11-17 with `docker scout policy` (CLI 1.26.0, docker-default configuration).
+  - Docker Scout counts 9 packages with copyleft licences (GPL, LGPL, MPL), all of them operating-system packages (it counts only packages whose licence it can read; the SBOM lists every component).
+- Signed with ReadyStack's release key (fingerprint `04daa92344a52dbc`): https://readystack.dev/keys/cosign.pub.
+- Runs as a non-root user (`caddy`).
+- Attestations on the image: an SPDX SBOM and SLSA provenance v1.
+- Rebuilt from this kit with network egress blocked on 2026-11-17; the rebuilt image digest is the published one.
+- Base: Ubuntu 24.04.
+
+The current grade, measured again every day, is on https://readystack.dev/products/caddy.
 
 Caddy is distributed under its upstream licence (Apache-2.0); the kit contains upstream's source under that licence, and each vendored component under its own.
 
@@ -39,3 +67,5 @@ The build trail (`ReadyStack-caddy-v2.11.9-CE-ubuntu24.04-r3.trail.json`, signed
 ## This repository
 
 `recipe/` holds the kit's recipe files (Dockerfiles, build scripts, pins) as published at https://readystack.dev/products/caddy/recipe. The complete kit is the release download. Each release is a tag here.
+
+— ReadyStack · https://readystack.dev
