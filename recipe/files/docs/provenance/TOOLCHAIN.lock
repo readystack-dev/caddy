@@ -1,0 +1,113 @@
+{
+  "apt_refresh": [
+    "base image apt-get upgrade + dist-upgrade in Dockerfile.base clears OS-package CVEs",
+    {
+      "min_version": "2.8.4ubuntu0.1",
+      "package": "apt",
+      "reason": "CVE-2026-109518 (High): apt 2.8.3 -> 2.8.4ubuntu0.1; found by the CVE tick of 2026-11-07T01:50Z (grype db built 2026-11-06T06:21Z) on v2.11.7-CE-ubuntu24.04-r5. Mirrored in product-kits/caddy/build/Dockerfile.vendor as a fail-closed check of the dist-upgrade closure (hand kits do not read apt_refresh)."
+    },
+    {
+      "min_version": "2.8.4ubuntu0.1",
+      "package": "libapt-pkg6.0t64",
+      "reason": "CVE-2026-109518 (High): libapt-pkg6.0t64 2.8.3 -> 2.8.4ubuntu0.1; found by the CVE tick of 2026-11-07T01:50Z (grype db built 2026-11-06T06:21Z) on v2.11.7-CE-ubuntu24.04-r5. Mirrored in product-kits/caddy/build/Dockerfile.vendor as a fail-closed check of the dist-upgrade closure (hand kits do not read apt_refresh)."
+    },
+    {
+      "min_version": "10.42-4ubuntu2.2",
+      "package": "libpcre2-8-0",
+      "reason": "CVE-2026-86145, CVE-2026-89156, CVE-2026-89157, CVE-2026-89158, CVE-2026-89160, CVE-2026-89161, CVE-2026-103111 (medium): libpcre2-8-0 10.42-4ubuntu2.1 -> 10.42-4ubuntu2.2; v2.11.7-CE-ubuntu24.04-r5 had 10.42-4ubuntu2.1 (daily scan 2026-11-06). Mirrored in product-kits/caddy/build/Dockerfile.vendor as a fail-closed check of the dist-upgrade closure (hand kits do not read apt_refresh)."
+    },
+    {
+      "min_version": "2.39-0ubuntu8.12",
+      "package": "libc6",
+      "reason": "USN-9065-1 (UBUNTU-CVE-2026-84243, high): libc6 2.39-0ubuntu8.9 -> 2.39-0ubuntu8.12, published 2026-11-13, found by the CVE tick of 2026-11-13T11:20Z on v2.11.9-CE-ubuntu24.04-r2. Mirrored in product-kits/caddy/build/Dockerfile.vendor as a fail-closed `atleast` check of the vendored packages (hand kits do not read apt_refresh)."
+    }
+  ],
+  "binaries_from_component_images": [],
+  "binaries_from_source": [
+    {
+      "build_cmd": "CGO_ENABLED=0 GOFLAGS=-mod=vendor GOPROXY=off go build -trimpath -ldflags='-s -w' -o /caddy .",
+      "from": "custom main module depending on github.com/caddyserver/caddy/v2@v2.11.9 + modules/standard",
+      "name": "caddy",
+      "out_path": "/usr/bin/caddy",
+      "verify": "caddy version  # must print v2.11.9"
+    }
+  ],
+  "build_method": "source-rebuild-go",
+  "chain_id": 1098,
+  "dep_bumps": [
+    {
+      "module": "golang.org/x/crypto",
+      "to": "v0.58.0",
+      "why": "moves with the x/net v0.62.0 floor: x/net v0.62.0's go.mod requires x/crypto v0.58.0, and the go mod resolution of caddy v2.11.9 with that floor (ReadyStackPrep2, 2026-11-07) resolved v0.58.0 (caddy v2.11.9 itself requires v0.57.0). The floor names the resolved value so held() checks it; OSV: only GO-2026-5932 (x/crypto/openpgp, no fix, not imported by caddy). Mirrored in product-kits/caddy/build/Dockerfile.vendor + Dockerfile as a raise-only floor() checked by held() (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "golang.org/x/net",
+      "to": "v0.62.0",
+      "why": "CVE-2026-78661 / GO-2026-6860 (HIGH, published 2026-10-27) and GO-2026-6866 (medium): golang.org/x/net below 0.62.0. caddy v2.11.7-CE-ubuntu24.04-r5 had 0.60.0 (this floor's previous value, the Go 1.26.9 companion of 2026-10-11) and caddy v2.11.9's own go.mod requires 0.60.0. Found by the daily scan of 2026-11-06 (grype 0.120.1, db 2026-11-05); fixed in 0.62.0, as in prometheus (81803dd8). Mirrored in product-kits/caddy/build/Dockerfile.vendor + Dockerfile as a raise-only floor() checked by held() (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "golang.org/x/sys",
+      "to": "v0.49.0",
+      "why": "moves with the x/net v0.62.0 floor: x/net v0.62.0 requires x/sys v0.49.0, and the go mod resolution of caddy v2.11.9 with that floor (ReadyStackPrep2, 2026-11-07) resolved v0.49.0 (caddy v2.11.9 itself requires v0.48.0); the floor names the resolved value so held() checks it. Mirrored in product-kits/caddy/build/Dockerfile.vendor + Dockerfile as a raise-only floor() checked by held() (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "golang.org/x/text",
+      "to": "v0.43.0",
+      "why": "moves with the x/net v0.62.0 floor: x/net v0.62.0 requires x/text v0.43.0, and the go mod resolution of caddy v2.11.9 with that floor (ReadyStackPrep2, 2026-11-07) resolved v0.43.0 (caddy v2.11.9 itself requires v0.42.0); the floor names the resolved value so held() checks it. Mirrored in product-kits/caddy/build/Dockerfile.vendor + Dockerfile as a raise-only floor() checked by held() (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "google.golang.org/grpc",
+      "to": "v1.83.2",
+      "why": "GHSA-hrxh-6v49-42gf (HIGH, CVSS 8.8, uncaught exception) \u2014 fixed in 1.82.1. Surfaced 2026-07-25 by the repro e2e run: CVE decay since the v2.11.4 ship (2026-06-24). Pinned, not @latest: an exact fixed version keeps the input set declarative, which the archive-forward reproducibility guarantee depends on. | RAISED to v1.83.2 2026-09-30: minio chain 468 verdict (grpc 1.83.1 -> 1.83.2 fixable C/H) | 2026-10-04: the hand kit never received the v1.83.2 raise and still ran a bare `go get google.golang.org/grpc@v1.82.1`; against caddy v2.11.7 (which requires v1.83.2) that DOWNGRADED caddy/v2 itself to v2.11.4, so chain 473 built v2.11.4 + grpc 1.82.1 + chi v5.2.5 under a v2.11.7 label. Now a raise-only floor (a no-op on v2.11.7) plus a vendor-stage assert that caddy/v2 resolved to v2.11.7."
+    },
+    {
+      "module": "github.com/klauspost/compress",
+      "to": "v1.20.3",
+      "why": "GO-2026-6865 / CVE-2026-116591 (HIGH): github.com/klauspost/compress below 1.20.2. caddy v2.11.7-CE-ubuntu24.04-r5 had v1.20.1 and caddy v2.11.9's own go.mod requires v1.20.1. Found by the CVE tick of 2026-11-07T01:50Z (grype db built 2026-11-06T06:21Z); floored at v1.20.3, the version prometheus v3.16.0 requires (0ef49e49). Mirrored in product-kits/caddy/build/Dockerfile.vendor + Dockerfile as a raise-only floor() checked by held() (hand kits do not read dep_bumps)."
+    }
+  ],
+  "expected_residuals": [],
+  "images": [
+    {
+      "digest": "sha256:dc40a13b61304647ed7e5d581d246b86413dfc29d63c6d018310feb93cd98fc0",
+      "ref": "golang:1.26.11-bookworm",
+      "role": "builder"
+    },
+    {
+      "digest": "sha256:dc40a13b61304647ed7e5d581d246b86413dfc29d63c6d018310feb93cd98fc0",
+      "ref": "golang:1.26.11-bookworm",
+      "role": "offline_builder"
+    }
+  ],
+  "mod_replaces": [],
+  "runtime_base": {
+    "hand_kit": true,
+    "kind": "chisel",
+    "provides": [
+      "getcap",
+      "setcap",
+      "capsh",
+      "getpcaps"
+    ],
+    "shell": true,
+    "slices": [
+      "libcap2-bin_bins"
+    ],
+    "tools": []
+  },
+  "schema": "kitforge.toolchain_lock.v1",
+  "slug": "caddy",
+  "source": {
+    "builder_image": "golang:1.26.11-bookworm",
+    "commit": "0d98caea58f794f88e709b1bef2880996a471bca",
+    "commit_epoch": 1793833511,
+    "go_module_root": "github.com/caddyserver/caddy/v2 (consumed as a dependency of a custom main module, NOT built from a checkout)",
+    "go_version_required": "1.26.0",
+    "ref": "v2.11.9",
+    "repo": "https://github.com/caddyserver/caddy",
+    "source_date_epoch": 1794879874,
+    "source_date_epoch_basis": "release-cut",
+    "source_date_epoch_provenance": "the time release v2.11.9-CE-ubuntu24.04-r3 was cut (2026-11-17T01:44:34Z), by scripts/retarget.py --rev-bump: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit 0d98caea58f7, dated 2026-11-04T23:05:11Z (source.commit_epoch)."
+  },
+  "version": "v2.11.9"
+}

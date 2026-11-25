@@ -1,0 +1,9 @@
+{
+  "schema": "kitforge.source_tree_hash.v1",
+  "slug": "caddy",
+  "repo": "https://github.com/caddyserver/caddy",
+  "ref": "v2.11.9",
+  "commit": "0d98caea58f794f88e709b1bef2880996a471bca",
+  "tree_listing_sha256": "5d2facdc29aac86a8324199b17b926492644473e77c2f6684159598b839ed808",
+  "file_count": 740
+}

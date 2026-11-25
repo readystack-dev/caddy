@@ -1,0 +1,56 @@
+{
+  "schema": "kitforge.build_recipe.v1",
+  "slug": "caddy",
+  "image": "readystack/caddy:v2.11.9-CE-ubuntu24.04-r3",
+  "build_method": "source-rebuild-go",
+  "source": {
+    "repo": "https://github.com/caddyserver/caddy",
+    "ref": "v2.11.9",
+    "go_module_root": "github.com/caddyserver/caddy/v2 (consumed as a dependency of a custom main module, NOT built from a checkout)",
+    "go_version_required": "1.26.0",
+    "builder_image": "golang:1.26.11-bookworm",
+    "source_date_epoch": 1794879874,
+    "source_date_epoch_provenance": "the time release v2.11.9-CE-ubuntu24.04-r3 was cut (2026-11-17T01:44:34Z), by scripts/retarget.py --rev-bump: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit 0d98caea58f7, dated 2026-11-04T23:05:11Z (source.commit_epoch).",
+    "commit": "0d98caea58f794f88e709b1bef2880996a471bca",
+    "source_date_epoch_basis": "release-cut",
+    "commit_epoch": 1793833511
+  },
+  "binaries_from_source": [
+    {
+      "name": "caddy",
+      "from": "custom main module depending on github.com/caddyserver/caddy/v2@v2.11.9 + modules/standard",
+      "build_cmd": "CGO_ENABLED=0 GOFLAGS=-mod=vendor GOPROXY=off go build -trimpath -ldflags='-s -w' -o /caddy .",
+      "out_path": "/usr/bin/caddy",
+      "verify": "caddy version  # must print v2.11.9"
+    }
+  ],
+  "runtime_packages": [
+    "base-files",
+    "base-passwd",
+    "ca-certificates",
+    "coreutils",
+    "dash",
+    "libc6",
+    "libcap2",
+    "libcap2-bin",
+    "libssl3t64",
+    "openssl",
+    "tzdata"
+  ],
+  "runtime_base": {
+    "kind": "chisel",
+    "shell": true,
+    "tools": [],
+    "slices": [
+      "libcap2-bin_bins"
+    ],
+    "provides": [
+      "getcap",
+      "setcap",
+      "capsh",
+      "getpcaps"
+    ],
+    "hand_kit": true,
+    "packages": "vendored/chisel/packages.tsv"
+  }
+}

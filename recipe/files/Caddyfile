@@ -1,0 +1,21 @@
+# ReadyStack Caddy — default config (CE build).
+#
+# Replace this file with your real site/reverse-proxy config: bind-mount a
+# directory with your Caddyfile over /etc/caddy. The defaults below give a
+# host-reachable /health endpoint and a placeholder page so the container boots
+# clean and is probeable.
+
+{
+	# Admin/config API. Bound to localhost only (no auth) — do NOT expose :2019
+	# to untrusted networks. Use it for `caddy reload`/config management.
+	admin localhost:2019
+}
+
+:80 {
+	# Liveness endpoint used by HEALTHCHECK and the build pipeline's boot probe.
+	@health path /health
+	respond @health "OK" 200
+
+	# Placeholder for the default site.
+	respond "ReadyStack Caddy (CE) — replace /etc/caddy/Caddyfile with your site config." 200
+}
